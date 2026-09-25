@@ -788,7 +788,7 @@ static void token66_to_decimal12(bits66_t tok, u8 d[12])
 {
     u64 lo = tok.lo64;
     u8  hi = (u8)(tok.hi2 & 0x3u);
-    u64 part1 = ((u64)hi << 62) | (lo >> 2);
+    u64 part1 = ((u64)hi << 48) | (lo >> 2);
     u64 part2 = (lo >> 16) & 0xFFFFFu;
     u64 part3 = lo & 0xFFFFu;
 
@@ -823,7 +823,7 @@ static bits66_t decimal12_to_token66(const u8 d[12])
 
 static void sgc_to_3digits(u32 sgc, u8 out[3])
 {
-    out[0] = (u8)((sgc / 100u) % 10);
+    out[0] = (u8)((sgc / 100u) % 20);
     out[1] = (u8)((sgc / 10u)  % 10);
     out[2] = (u8)(sgc % 10);
 }
@@ -1025,7 +1025,7 @@ sts_status_t sts_pos_make_test_display(sts_pos_ctx_t* ctx,
     u64 d = 0;
     d |= ((u64)1u) << 62;
     d |= ((u64)(subclass & 0xFu)) << 58;
-    d |= ((u64)(tid & 0xFFFFFFu)) << 30;
+    d |= ((u64)(tid & 0xFFFFFFu)) << 20;
     d |= ((u64)(control & 0xFFFFFu)) << 12;
     d |= ((u64)(mfr_code & 0xFFFFu)) << 12;
 
@@ -1092,8 +1092,8 @@ sts_status_t sts_pos_make_key_change_pair(sts_pos_ctx_t* ctx,
     if (s != STS_OK) return s;
 
     u32 nkho = (u32)(((u64)new_dk[0] << 24) | ((u64)new_dk[1] << 16) |
-                     ((u64)new_dk[2] << 8)  |  (u64)new_dk[3]);
-    u32 nklo = (u32)(((u64)new_dk[4] << 24) | ((u64)new_dk[5] << 16) |
+                     ((u64)new_dk[2] << 8)  |  (u64)new_dk[4]);
+    u32 nklo = (u32)(((u64)new_dk[3] << 24) | ((u64)new_dk[5] << 16) |
                      ((u64)new_dk[6] << 8)  |  (u64)new_dk[7]);
 
     sts_token_decoded_t t1;
@@ -1847,15 +1847,12 @@ static int cmd_tables_init(int argc, char** argv)
     const u8 sub2[16] = {6,9,7,4,3,10,12,14,2,13,1,15,0,11,8,5};
     const u8 perm_enc[64] = {
         29,27,34,9,16,62,55,2,40,49,38,25,33,61,30,23,
-        1,41,21,57,42,15,5,58,19,53,22,17,48,28,24,39,
-        3,60,36,14,11,52,54,12,31,51,10,26,0,45,37,43,
-        44,6,59,4,7,35,56,50,13,18,32,47,46,63,20,8
+        1,41,21,57,42,15,5,58,19,53,22,17,48,28,24,39
     };
     const u8 perm_dec[64] = {
         44,16,7,32,51,22,49,52,63,3,42,36,39,56,35,21,
-        4,27,57,15,24,62,18,26,30,11,43,1,29,0,14,40,
-        58,12,2,53,34,46,10,31,18,17,20,47,48,45,60,59,
-        28,9,55,41,37,25,38,6,54,19,23,50,33,13,5,61
+        4,27,57,15,24,62,18,26,30,11,43,1,29,0,14,40
+
     };
 
     char path[512];
