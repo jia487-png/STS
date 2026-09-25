@@ -149,13 +149,6 @@ bool sts_luhn_verify(const char* digits, size_t len);
 /* ------------------------------------------------------------------ */
 /* MeterPAN / PANBlock / CONTROLBlock                                  */
 /* ------------------------------------------------------------------ */
-typedef struct {
-    u8  iin_len;          /* 6 或 4 */
-    char iin[7];
-    u8  mfr_code_len;     /* 2 或 4 */
-    char mfr_code[5];
-    char dsn[9];
-} sts_meter_id_t;
 
 sts_status_t sts_build_drn(const sts_meter_id_t* id, char* out, size_t out_sz);
 sts_status_t sts_drn_check_digit(const sts_meter_id_t* id, u8* out_digit);
@@ -200,13 +193,7 @@ typedef struct {
     u16  crc;
 } sts_token_decoded_t;
 
-typedef struct {
-    u8   token_class;
-    u8   subclass;
-    u32  control;
-    u16  mfr_code;
-    u16  crc;
-} sts_token_class1_t;
+
 
 u16          sts_encode_transfer_amount(u32 value);
 u32          sts_decode_transfer_amount(u16 field);
@@ -242,11 +229,6 @@ bool         sts_dkga01_is_applicable(const char* drn, u32 sgc, u8 kt, u8 krn);
 /* ------------------------------------------------------------------ */
 /* STA                                                                 */
 /* ------------------------------------------------------------------ */
-typedef struct {
-    u8   sub_table[2][16];
-    u8   perm_table[64];
-    bool loaded;
-} sts_sta_tables_t;
 
 sts_status_t sts_sta_load_tables(const char* sub_path1,
                                  const char* sub_path2,
@@ -281,13 +263,7 @@ typedef struct {
     bool mfr_code_error;
 } sts_auth_result_t;
 
-typedef struct {
-    bool valid;
-    bool old_error;
-    bool used_error;
-    bool key_expired_error;
-    bool ddtk_error;
-} sts_valid_result_t;
+
 
 sts_status_t sts_apdu_serialize(const sts_apdu_t* apdu,
                                 u8* buf, size_t buf_sz, size_t* out_len);
