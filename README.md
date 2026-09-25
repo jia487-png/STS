@@ -463,3 +463,23 @@ int sts_cli_main(int argc, char** argv);
 #endif /* STS_ALL_H */
 
 ~~~~~
+
+
+#使用情况
+
+:: 生成 20 位数字令牌
+sts_toolkit.exe tcdu-enc 100 1698595
+
+:: 解析该令牌
+sts_toolkit.exe tcdu-dec 0109010162670010012
+
+:: 端到端测试
+sts_toolkit.exe roundtrip 250 200
+
+:: 内置一致性测试
+sts_toolkit.exe test
+
+:: 初始化 STA 表占位文件（需要先手动 mkdir tables）
+mkdir tables
+sts_toolkit.exe tables-init tables
+sts_toolkit.exe sta-selftest tables
